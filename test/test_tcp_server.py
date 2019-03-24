@@ -18,7 +18,7 @@ class TestTcpServer:
             pass
         assert not self.server.is_connected
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.settimeout(5)
+        self.socket.settimeout(1)
 
     def connect(self):
         tcp_ip = '127.0.0.1'
@@ -51,8 +51,7 @@ class TestTcpServer:
 
         self.server.do_work = do_work_spy
         self.socket.send(b'data received by server')
-        while self.socket.recv(self.server_message_size) != b'data sent by server':
-            pass
+        assert self.socket.recv(self.server_message_size) == b'data sent by server'
         self.disconnect()
 
     def test_server_does_work_multiple_times(self):
@@ -65,11 +64,9 @@ class TestTcpServer:
                 return b'data sent by server 2'
         self.server.do_work = do_work_spy
         self.socket.send(b'data received by server 1')
-        while self.socket.recv(self.server_message_size) != b'data sent by server 1':
-            pass
         self.socket.send(b'data received by server 2')
-        while self.socket.recv(self.server_message_size) != b'data sent by server 2':
-            pass
+        assert self.socket.recv(self.server_message_size) == b'data sent by server 1'
+        assert self.socket.recv(self.server_message_size) == b'data sent by server 2'
         self.disconnect()
 
     def teardown_method(self):
