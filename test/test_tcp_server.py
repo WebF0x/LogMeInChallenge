@@ -6,10 +6,8 @@ from logmein.tcp_server import TcpServer
 
 class TestTcpServer:
     def setup_method(self):
-        tcp_ip = '127.0.0.1'
-        tcp_port = 5005
         self.server_message_size = 50
-        self.server = TcpServer(tcp_ip, tcp_port, self.server_message_size)
+        self.server = TcpServer('127.0.0.1', 5005, self.server_message_size)
         assert not self.server.is_running
         assert not self.server.is_connected
         self.server_thread = threading.Thread(target=self.server.start_listening)
@@ -21,9 +19,7 @@ class TestTcpServer:
         self.socket.settimeout(1)
 
     def connect(self):
-        tcp_ip = '127.0.0.1'
-        tcp_port = 5005
-        self.socket.connect((tcp_ip, tcp_port))
+        self.socket.connect(('127.0.0.1', 5005))
         while not self.server.is_connected:
             pass
 
@@ -64,8 +60,8 @@ class TestTcpServer:
                 return b'data sent by server 2'
         self.server.do_work = do_work_spy
         self.socket.send(b'data received by server 1')
-        self.socket.send(b'data received by server 2')
         assert self.socket.recv(self.server_message_size) == b'data sent by server 1'
+        self.socket.send(b'data received by server 2')
         assert self.socket.recv(self.server_message_size) == b'data sent by server 2'
         self.disconnect()
 

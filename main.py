@@ -3,7 +3,7 @@ from logmein.logmein import Logmein
 
 def main():
     print('Initializing')
-    logmein = Logmein()
+    logmein = Logmein('127.0.0.1', 5005, 2000)
     logmein.initialize('sipRegistrations.txt')
     print('Starting server')
     logmein.start_server_in_thread()

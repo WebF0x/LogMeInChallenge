@@ -7,10 +7,10 @@ from logmein.tcp_server import TcpServer
 
 
 class Logmein:
-    def __init__(self):
-        self.tcp_ip = '127.0.0.1'
-        self.tcp_port = 5005
-        self.server_message_size = 2000
+    def __init__(self, tcp_ip, tcp_port, message_size):
+        self.tcp_ip = tcp_ip
+        self.tcp_port = tcp_port
+        self.server_message_size = message_size
         self.server = TcpServer(self.tcp_ip, self.tcp_port, self.server_message_size)
         self.server_thread = None
         self.socket = None

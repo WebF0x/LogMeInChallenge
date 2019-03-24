@@ -3,7 +3,7 @@ from logmein.logmein import Logmein
 
 class TestIntegrationLogmein:
     def setup_method(self):
-        self.logmein = Logmein()
+        self.logmein = Logmein('127.0.0.1', 5005, 2000)
         self.logmein.initialize('test_data/test_sip_registrations.txt')
         self.logmein.start_server_in_thread()
         self.logmein.connect()
