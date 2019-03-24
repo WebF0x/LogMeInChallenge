@@ -1,3 +1,7 @@
+import time
+
+import pytest
+
 from logmein.logmein import Logmein
 
 
@@ -24,6 +28,20 @@ class TestIntegrationLogmein:
     def test_when_address_of_record_not_found_then_return_empty_string(self):
         sip_registration = self.logmein.query('addressOfRecordThatDoesNotExist')
         assert sip_registration == ''
+
+    def test_when_connection_inactive_for_10_seconds_then_close_connection(self):
+        time.sleep(11)
+        with pytest.raises(ConnectionAbortedError):
+            self.logmein.query('dummyAddressOfRecord')
+
+    def test_reconnection_after_connection_timeout(self):
+        time.sleep(11)
+        with pytest.raises(ConnectionAbortedError):
+            self.logmein.query('dummyAddressOfRecord')
+        self.logmein.disconnect()
+        self.logmein.initialize_socket_to_server()
+        self.logmein.connect()
+        self.logmein.query('dummyAddressOfRecord')
 
     def teardown_method(self):
         self.logmein.disconnect()

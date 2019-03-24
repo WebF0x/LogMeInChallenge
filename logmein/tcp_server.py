@@ -19,11 +19,15 @@ class TcpServer(object):
         while self.is_running:
             try:
                 connection, address = socket_to_client.accept()
+                connection.settimeout(10)
             except socket.timeout:
                 continue
             self.is_connected = True
             while self.is_running:
-                received_data = connection.recv(self.buffer_size)
+                try:
+                    received_data = connection.recv(self.buffer_size)
+                except socket.timeout:
+                    break
                 if not received_data:
                     break
                 if self.do_work:
