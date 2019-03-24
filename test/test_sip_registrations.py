@@ -28,6 +28,7 @@ def test_load_sip_registrations_data_correctly():
     sip_registrations = parse_sip_registrations(sip_registrations_string)
     sip_registration_1 = sip_registrations['dummyAddressOfRecord']
     sip_registration_2 = sip_registrations['dummyAddressOfRecord2']
+    assert 'dummyAddressOfRecord' not in sip_registration_1
     assert sip_registration_1['tenantId'] == 'dummyTenantId'
     assert sip_registration_1['uri'] == 'dummyUri'
     assert sip_registration_1['contact'] == 'dummyContact'
@@ -38,6 +39,7 @@ def test_load_sip_registrations_data_correctly():
     assert sip_registration_1['rawUserAgent'] == 'dummyRawUserAgent'
     assert sip_registration_1['created'] == 'dummyCreated'
     assert sip_registration_1['lineId'] == 'dummyLineId'
+    assert 'dummyAddressOfRecord2' not in sip_registration_2
     assert sip_registration_2['tenantId'] == 'dummyTenantId2'
     assert sip_registration_2['uri'] == 'dummyUri2'
     assert sip_registration_2['contact'] == 'dummyContact2'
